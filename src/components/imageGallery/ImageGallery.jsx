@@ -1,10 +1,14 @@
 import ImageCard from "../imageGallery/imageCard/ImageCard";
 
-const ImageGallery = () => {
+import css from "./ImageGallery.module.css";
+
+const ImageGallery = ({ images }) => {
   return (
-    <div>
-      <ImageCard />
-    </div>
+    <ul className={css.list}>
+      {images.map(({ id, urls: { small } }) => (
+        <ImageCard key={id} imageSmall={small} />
+      ))}
+    </ul>
   );
 };
 
