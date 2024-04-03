@@ -20,41 +20,30 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
-    const request = form.elements[1].value;
-    onSearch(request, page);
-    form.reset();
+    const query = form.elements[1].value;
+    onSearch(query, page);
   };
 
-  const onSearch = async (request, page) => {
+  const onSearch = async (query, page) => {
     try {
       setLoader(true);
-      const data = await fetchPhoto(request, page);
-      setImages(data.data.results);
+      const data = await fetchPhoto(query, page);
+      const results = data.data.results;
+      setImages([...images, ...results]);
+      setPage(page + 1);
+      return;
     } catch (error) {
-      console.log(error);
+      setErrorMessage(true);
     } finally {
       setLoader(false);
     }
   };
 
-  // const onLoadMore = async (page) => {
-  //   try {
-  //     setPage(page + 1);
-  //     setLoader(true);
-  //     const data = await fetchPhoto(page);
-  //     setImages(data.data.results);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoader(false);
-  //   }
-  // };
-
   return (
     <div className="container">
       <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && <ImageGallery images={images} />}
-      {images.length > 0 && <LoadMoreBtn onClick={onSearch} />}
+      {images.length > 0 && <LoadMoreBtn />}
       <div className="loader">{loader && <Loader />}</div>
       {errorMessage && <ErrorMessage />}
       <ImageModal />

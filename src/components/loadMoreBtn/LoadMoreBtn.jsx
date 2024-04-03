@@ -1,10 +1,10 @@
 import css from "./LoadMoreBtn.module.css";
 
-const LoadMoreBtn = ({ onClick }) => {
+const LoadMoreBtn = () => {
   return (
-    <div className={css.button} onClick={onClick}>
+    <button type="submit" form="form" className={css.button}>
       Load more
-    </div>
+    </button>
   );
 };
 

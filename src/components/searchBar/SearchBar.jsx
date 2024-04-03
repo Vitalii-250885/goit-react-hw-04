@@ -5,8 +5,8 @@ import css from "./SearchBar.module.css";
 const SearchBar = ({ onSubmit }) => {
   return (
     <header className={css.header}>
-      <form onSubmit={onSubmit}>
-        <button className={css.button}>
+      <form onSubmit={onSubmit} id="form">
+        <button type="submit" className={css.button}>
           <BiSearch />
         </button>
 
