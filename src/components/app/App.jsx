@@ -29,7 +29,7 @@ function App() {
     try {
       setLoader(true);
       const data = await fetchPhoto(request, page);
-      setImages(...images, data.data.results);
+      setImages(data.data.results);
     } catch (error) {
       console.log(error);
     } finally {
@@ -37,16 +37,24 @@ function App() {
     }
   };
 
-  const onLoadMore = () => {
-    setPage(page + 1);
-    console.log(page);
-  };
+  // const onLoadMore = async (page) => {
+  //   try {
+  //     setPage(page + 1);
+  //     setLoader(true);
+  //     const data = await fetchPhoto(page);
+  //     setImages(data.data.results);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoader(false);
+  //   }
+  // };
 
   return (
     <div className="container">
       <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && <ImageGallery images={images} />}
-      {images.length > 0 && <LoadMoreBtn onClick={onLoadMore} />}
+      {images.length > 0 && <LoadMoreBtn onClick={onSearch} />}
       <div className="loader">{loader && <Loader />}</div>
       {errorMessage && <ErrorMessage />}
       <ImageModal />
