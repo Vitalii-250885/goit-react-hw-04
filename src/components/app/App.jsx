@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { fetchPhoto } from "../../photo-api.js";
+import { fetchPhoto } from "../../api/photo-api.js";
 
 import LoadMoreBtn from "../loadMoreBtn/LoadMoreBtn.jsx";
 import SearchBar from "../searchBar/SearchBar.jsx";
@@ -16,6 +16,8 @@ function App() {
   const [loader, setLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [images, setImages] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [regular, setRegular] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,6 +31,7 @@ function App() {
       setLoader(true);
       const data = await fetchPhoto(query, page);
       const results = data.data.results;
+      console.log(data);
       setImages([...images, ...results]);
       setPage(page + 1);
       return;
@@ -39,14 +42,25 @@ function App() {
     }
   };
 
+  const handleShowModal = (regular) => {
+    setRegular(regular);
+    setModal(true);
+  };
+
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <div className="container">
       <SearchBar onSubmit={handleSubmit} />
-      {images.length > 0 && <ImageGallery images={images} />}
+      {images.length > 0 && (
+        <ImageGallery images={images} handleShowModal={handleShowModal} />
+      )}
       {images.length > 0 && <LoadMoreBtn />}
       <div className="loader">{loader && <Loader />}</div>
       {errorMessage && <ErrorMessage />}
-      <ImageModal />
+      {modal && <ImageModal regular={regular} onClose={onClose} />}
     </div>
   );
 }
