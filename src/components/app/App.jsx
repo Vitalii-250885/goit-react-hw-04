@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 import { fetchPhoto } from "../../api/photo-api.js";
 
@@ -16,7 +17,7 @@ function App() {
   const [loader, setLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [images, setImages] = useState([]);
-  const [modal, setModal] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
   const [regular, setRegular] = useState("");
 
   const handleSubmit = (e) => {
@@ -42,25 +43,56 @@ function App() {
     }
   };
 
-  const handleShowModal = (regular) => {
+  const openModal = (regular) => {
     setRegular(regular);
-    setModal(true);
+    setIsOpen(true);
+
+    toast("🦄 Wow so easy!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: "bounce",
+    });
   };
 
-  const onClose = () => {
-    setModal(false);
+  const closeModal = () => {
+    setIsOpen(false);
   };
 
   return (
     <div className="container">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition="bounce"
+      >
+        Введіть щось для запиту!
+      </ToastContainer>
       <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && (
-        <ImageGallery images={images} handleShowModal={handleShowModal} />
+        <ImageGallery images={images} openModal={openModal} />
       )}
-      {images.length > 0 && <LoadMoreBtn />}
+      {images.length > 0 && <LoadMoreBtn handleSubmit={handleSubmit} />}
       <div className="loader">{loader && <Loader />}</div>
       {errorMessage && <ErrorMessage />}
-      {modal && <ImageModal regular={regular} onClose={onClose} />}
+      <ImageModal
+        regular={regular}
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+      />
     </div>
   );
 }
