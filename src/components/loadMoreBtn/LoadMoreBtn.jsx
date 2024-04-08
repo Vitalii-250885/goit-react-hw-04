@@ -1,14 +1,8 @@
-import css from "./LoadMoreBtn.module.css";
+import css from './LoadMoreBtn.module.css';
 
-const LoadMoreBtn = ({ handleSubmit }) => {
+const LoadMoreBtn = ({ hendleLoadMore }) => {
   return (
-    <button
-      type="submit"
-      className={css.button}
-      onClick={() => {
-        handleSubmit();
-      }}
-    >
+    <button type="submit" className={css.button} onClick={hendleLoadMore}>
       Load more
     </button>
   );

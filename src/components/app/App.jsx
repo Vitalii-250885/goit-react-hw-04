@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,35 +20,50 @@ function App() {
   const [images, setImages] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [regular, setRegular] = useState('');
+  const [showBtn, setShowBtn] = useState(false);
 
-  const notification = () => toast('Для пошуку введіть щось');
+  const [query, setQuery] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.target;
     const query = form.elements[1].value;
+    setQuery(query);
+    setPage(1);
+    setImages([]);
+
     if (query === '') {
       notification();
       return;
     }
-    onSearch(query, page);
   };
 
-  const onSearch = async (query, page) => {
-    try {
-      setLoader(true);
-      const data = await fetchPhoto(query, page);
-      const results = data.data.results;
-      console.log(data);
-      setImages([...images, ...results]);
-      setPage(page + 1);
-      return;
-    } catch (error) {
-      setErrorMessage(true);
-    } finally {
-      setLoader(false);
-    }
-  };
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoader(true);
+        const data = await fetchPhoto(query, page);
+        const results = data.data.results;
+        console.log(data.data.total_pages);
+
+        if (data.data.total_pages && data.data.total_pages !== page) {
+          setShowBtn(true);
+        } else {
+          setShowBtn(false);
+        }
+
+        setImages([...images, ...results]);
+        return;
+      } catch (error) {
+        setErrorMessage(true);
+      } finally {
+        setLoader(false);
+      }
+    };
+    load();
+  }, [query, page]);
+
+  const notification = () => toast.warn('Для пошуку введіть щось!', { theme: 'colored' });
 
   const openModal = regular => {
     setRegular(regular);
@@ -59,26 +74,19 @@ function App() {
     setIsOpen(false);
   };
 
+  const hendleLoadMore = () => {
+    setPage(page + 1);
+  };
+
   return (
     <div className="container">
       <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && <ImageGallery images={images} openModal={openModal} />}
-      {images.length > 0 && <LoadMoreBtn handleSubmit={handleSubmit} />}
+      {showBtn && <LoadMoreBtn hendleLoadMore={hendleLoadMore} />}
       <div className="loader">{loader && <Loader />}</div>
       {errorMessage && <ErrorMessage />}
       <ImageModal regular={regular} modalIsOpen={modalIsOpen} closeModal={closeModal} />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer />
     </div>
   );
 }
