@@ -10,7 +10,9 @@ import Loader from "../loader/Loader.jsx";
 import ErrorMessage from "../errorMessage/ErrorMessage.jsx";
 import ImageModal from "../imageModal/ImageModal.jsx";
 
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
+
 
 function App() {
   const [page, setPage] = useState(1);
@@ -20,10 +22,16 @@ function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [regular, setRegular] = useState("");
 
+  const notification = () => toast("Для пошуку введіть щось")
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const query = form.elements[1].value;
+    if (query === '') {
+      notification();
+      return;
+    }
     onSearch(query, page);
   };
 
@@ -47,17 +55,7 @@ function App() {
     setRegular(regular);
     setIsOpen(true);
 
-    toast("🦄 Wow so easy!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: "bounce",
-    });
+    
   };
 
   const closeModal = () => {
@@ -78,9 +76,8 @@ function App() {
         pauseOnHover
         theme="colored"
         transition="bounce"
-      >
-        Введіть щось для запиту!
-      </ToastContainer>
+      />
+
       <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && (
         <ImageGallery images={images} openModal={openModal} />
