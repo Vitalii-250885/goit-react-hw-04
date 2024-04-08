@@ -10,9 +10,9 @@ import Loader from "../loader/Loader.jsx";
 import ErrorMessage from "../errorMessage/ErrorMessage.jsx";
 import ImageModal from "../imageModal/ImageModal.jsx";
 
-import 'react-toastify/dist/ReactToastify.css';
-import "./App.css";
 
+import "./App.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [page, setPage] = useState(1);
@@ -54,8 +54,6 @@ function App() {
   const openModal = (regular) => {
     setRegular(regular);
     setIsOpen(true);
-
-    
   };
 
   const closeModal = () => {
@@ -75,7 +73,6 @@ function App() {
         draggable
         pauseOnHover
         theme="colored"
-        transition="bounce"
       />
 
       <SearchBar onSubmit={handleSubmit} />
