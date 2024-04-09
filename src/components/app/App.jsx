@@ -38,6 +38,7 @@ function App() {
       setShowBtn(data.data.total_pages && data.data.total_pages !== page);
 
       setImages([...images, ...results]);
+      setErrorMessage(false);
       return;
     } catch (error) {
       setErrorMessage(true);
@@ -48,7 +49,6 @@ function App() {
 
   useEffect(() => {
     load(query, page);
-    console.log(query, page);
   }, [query, page]);
 
   const openModal = regular => {

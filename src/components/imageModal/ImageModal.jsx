@@ -1,21 +1,20 @@
-import css from "./ImageModal.module.css";
+import css from './ImageModal.module.css';
 
-import Modal from "react-modal";
+import ReactModal from 'react-modal';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 const ImageModal = ({ regular, modalIsOpen, closeModal }) => {
   return (
     <>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        className={css.modal}
-      >
+      <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} className={css.modal}>
         <div className={css.backdrop} onClick={closeModal}>
           <div className={css.modal}>
             <img src={regular} alt="" className={css.image} />
           </div>
         </div>
-      </Modal>
+      </ReactModal>
     </>
   );
 };

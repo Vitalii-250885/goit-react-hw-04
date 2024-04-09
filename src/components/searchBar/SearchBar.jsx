@@ -9,12 +9,13 @@ const SearchBar = ({ handleUpdatePage }) => {
     const form = e.target;
     const { input } = form.elements;
     const query = input.value;
-    handleUpdatePage(query);
 
     if (query === '') {
       notification();
       return;
     }
+
+    handleUpdatePage(query);
   };
 
   const notification = () => toast.error('Для пошуку введіть щось!');
