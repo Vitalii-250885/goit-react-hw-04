@@ -1,16 +1,33 @@
-import { BiSearch } from "react-icons/bi";
+import { BiSearch } from 'react-icons/bi';
+import toast from 'react-hot-toast';
 
-import css from "./SearchBar.module.css";
+import css from './SearchBar.module.css';
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ handleUpdatePage }) => {
+  const hendleSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+    const { input } = form.elements;
+    const query = input.value;
+    handleUpdatePage(query);
+
+    if (query === '') {
+      notification();
+      return;
+    }
+  };
+
+  const notification = () => toast.error('Для пошуку введіть щось!');
+
   return (
     <header className={css.header}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={hendleSubmit}>
         <button type="submit" className={css.button}>
           <BiSearch />
         </button>
 
         <input
+          name="input"
           type="text"
           autoComplete="off"
           autoFocus
